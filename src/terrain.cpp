@@ -131,7 +131,7 @@ void terrain::custom_generation(void){
   while((i <= obst_n) && (!fs.eof())){
 
     fs >> obst_i[i] >> aux >> obst_j[i];
-    set_pos(obst_i[i], obst_j[i], 'o');
+    set_pos(obst_i[i], obst_j[i], '0');
 
     i++;
   }
@@ -146,7 +146,7 @@ void terrain::fill()
     //M_.resize()
     for(int i = 0; i < m_; i++){
         for(int j = 0; j < n_; j++){
-            if(M_[i][j] != 'o')
+            if(M_[i][j] != '0')
                 M_[i][j] = ' ';
         }
     }
@@ -163,7 +163,10 @@ int terrain::get_n(void){
 
 char terrain::get_pos(int i, int j)
 {
-    return M_[i][j];
+    if(i<0 || j<0 || i>=m_ || j>=n_)
+      return '0';
+    else
+      return M_[i][j];
 }
 
 
@@ -183,15 +186,6 @@ std::pair<int,int> terrain::get_end(void)
 std::pair<int,int> terrain::get_car(void)
 {
     return car_;
-}
-
-
-void terrain::move_car(int x, int y){
-
-  M_[car_.first][car_.second] = '*';
-  M_[x][y] = 'Y';
-  car_.first = x;
-  car_.second = y;
 }
 
 
@@ -238,6 +232,7 @@ void terrain::write_map_grafico(){
   start_color();
   init_pair(1, COLOR_WHITE, COLOR_BLUE);
   init_pair(2, COLOR_WHITE, COLOR_YELLOW);
+  init_pair(3, COLOR_WHITE, COLOR_RED);
   attron(COLOR_PAIR(1));
 
   int y = ((COLS/2) - (m_ + 1));
@@ -261,24 +256,38 @@ void terrain::write_map_grafico(){
   for(int i=0; (i<m_) && (i < LINES -1) ; i++){
 
     move(x+i+1,y);
+    attron(COLOR_PAIR(1));
     addch(ACS_VLINE);
-
+    attroff(COLOR_PAIR(1));
     for(int j=0; (j<n_) && (j < COLS -1); j++){
 
       if(M_[i][j]=='Y'){
         attron(COLOR_PAIR(2));
         printw("%c ",  M_[i][j]);
         attroff(COLOR_PAIR(2));
-        attron(COLOR_PAIR(1));
+      }
+      else if(M_[i][j]=='X'){
+        attron(COLOR_PAIR(3));
+        printw("%c ",  M_[i][j]);
+        attroff(COLOR_PAIR(3));
+      }
+      else if(M_[i][j]=='*'){
+        attron(COLOR_PAIR(2));
+        printw("%c ",  M_[i][j]);
+        attroff(COLOR_PAIR(2));
       }
       else{
+        attron(COLOR_PAIR(1));
         printw("%c ",  M_[i][j]);
+        attroff(COLOR_PAIR(1));
       }
     }
+      attron(COLOR_PAIR(1));
       addch(ACS_VLINE);
+      attroff(COLOR_PAIR(1));
   }
 
-
+  attron(COLOR_PAIR(1));
   move(x + m_ + 1, y);
   addch (ACS_LLCORNER);
 

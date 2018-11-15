@@ -23,7 +23,8 @@ class Iatester {
 
 
     std::list<path> find_new_paths(std::list<path>& new_path_list, path& actual_path, int opt);
-    void astar(node start, node end);
+    void astar(node start, node end, int opt);
+    void astar_grafico(node start, node goal, int opt);
     bool insert_path_close_list(std::list<path>& closed_list, path& path);
     void insert_path_open_list(std::list<path>& open_list, std::list<path>& close_list, path path);
     void sort_list(std::list<path>& source_list);

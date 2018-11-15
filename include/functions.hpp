@@ -16,16 +16,17 @@ void PrintHelp()
              "  -h : Alto.  [Default: 50]\n"
              "  -p : Probabilidad bloques.  [Default: 5] \n"
              "  -f : Archivo preconfigurado\n";
+             "  -a : Funcion heuristica. [1,2,3]";
     exit(0);
 }
 
 
 std::vector<int> ProcessArgs(int argc, char** argv){
 
-    const char* const short_opts = "dgw:h:p:f";
+    const char* const short_opts = "dgw:h:p:fa:";
 
     int opt = 0, index = 0;
-    std::vector<int> valores(4);
+    std::vector<int> valores(5);
 
     while ((opt = getopt(argc, argv, short_opts)) != -1)
     {
@@ -53,6 +54,9 @@ std::vector<int> ProcessArgs(int argc, char** argv){
             break;
         case 'f':
             break;
+        case 'a':
+            valores[4]=atoi(optarg);
+            break;
 
         case '?':
             PrintHelp();
@@ -70,6 +74,8 @@ std::vector<int> ProcessArgs(int argc, char** argv){
       valores[1]=DEFAULT_WIDTH;
     if (valores[2]==0)
       valores[2]=DEFAULT_HEIGHT;
+    if (valores[4]==0)
+      valores[0]==1;
 
     return valores;
 

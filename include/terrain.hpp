@@ -44,8 +44,6 @@ public:
     bool is_free(int x, int y);
     bool has_end(void);
 
-    void move_car(int x, int y);
-
     int get_m(void);
     int get_n(void);
 

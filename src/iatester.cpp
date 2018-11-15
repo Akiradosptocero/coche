@@ -3,7 +3,15 @@
 Iatester::Iatester(std::vector<int> values, bool fromfile){
 
     system("clear");
+    counter=0;
+    counter_p=0;
     T = terrain(values[1], values[2], values[0], fromfile);
+
+    std::pair<int,int> auxstart = T.get_car();
+    std::pair<int,int> auxend = T.get_end();
+
+    node start(auxstart.first, auxstart.second);
+    node end(auxend.first, auxend.second);
 
     if(values[3]==1){
       noecho();
@@ -14,16 +22,11 @@ Iatester::Iatester(std::vector<int> values, bool fromfile){
         erase();
         T.write_map_grafico();
       }
+      astar_grafico(start, end, values[4]);
       endwin();
     }
-    else{
-      std::pair<int,int> auxstart = T.get_car();
-      std::pair<int,int> auxend = T.get_end();
-
-      node start(auxstart.first, auxstart.second);
-      node end(auxend.first, auxend.second);
-      astar(start, end);
-    }
+    else
+      astar(start, end, values[4]);
 
 }
 
@@ -119,7 +122,7 @@ std::list<path> Iatester::find_new_paths(std::list<path>& new_path_list,  path& 
         counter++;
     }
 
-    if((a != '0') | (a > 0)){
+    if((a != '0') && (start_y > 0)){
 
         aux = actual_path;
 
@@ -135,7 +138,7 @@ std::list<path> Iatester::find_new_paths(std::list<path>& new_path_list,  path& 
 
     }
 
-    if((s != '0') | (s < T.get_m())){
+    if((s != '0') && (start_x < T.get_m())){
 
         aux = actual_path;
 
@@ -149,7 +152,7 @@ std::list<path> Iatester::find_new_paths(std::list<path>& new_path_list,  path& 
         counter++;
     }
 
-    if((d != '0') | (d < T.get_n())){
+    if((d != '0') && (start_y < T.get_n())){
 
         aux = actual_path;
 
@@ -172,19 +175,11 @@ std::list<path> Iatester::find_new_paths(std::list<path>& new_path_list,  path& 
 
 
         //Algoritmo A*
-void Iatester::astar(node start, node goal)
+void Iatester::astar(node start, node goal, int opt)
 {
     std::list<path> open_list;
     std::list<path> close_list;
     bool solution = false;
-
-    std::cout << "Punto inicial es: " << start.get_x() << ' ' << start.get_y() << '\n';
-
-
-    int opt;
-    std::cout << "Qué función heurística quieres usar? (1: pitágoras; 2: la otra; 3: mínimo) \n";
-    std::cin >> opt;
-
 
     path initial_path;
     initial_path.add(start.get_x(), start.get_y());
@@ -235,11 +230,11 @@ void Iatester::astar(node start, node goal)
 
             T.set_pos(solution_path[i-1].get_x(), solution_path[i-1].get_y(), '*');
             counter_p++;
-            system("sleep 0.5");
+            system("sleep 1");
             system("clear");
             T.write_map();
         }
-        system("sleep 0.5");
+        system("sleep 1");
         system("clear");
         std::cout << "\n\n";
         T.write_map();
@@ -354,4 +349,74 @@ void Iatester::sort_list(std::list<path>& source_list) {
 
         source_list.push_front(min_path);
     }
+}
+
+
+void Iatester::astar_grafico(node start, node goal, int opt)
+{
+    std::list<path> open_list;
+    std::list<path> close_list;
+    bool solution = false;
+
+    path initial_path;
+    initial_path.add(start.get_x(), start.get_y());
+
+    float cost = heuristic(start.get_x(), start.get_y(), goal.get_x(), goal.get_y(), opt);
+
+    initial_path.update_cost(cost);
+
+    open_list.push_front(initial_path);
+
+
+    int cont = 0;
+
+
+    while((!open_list.empty()) && (!solution)){
+
+        if((open_list.front().get_last_x() == goal.get_x()) && open_list.front().get_last_y() == goal.get_y())
+            solution = true;
+        else{
+            path aux = (*open_list.begin()).get_path();
+
+            open_list.pop_front();
+
+            bool explore = false;
+
+            explore = insert_path_close_list(close_list, aux);
+
+            std::list<path> new_path_list;
+            if(explore){
+                find_new_paths(new_path_list, aux, opt);
+            }
+            for(std::list<path>::iterator list_iter = new_path_list.begin(); list_iter != new_path_list.end(); ++list_iter)
+                insert_path_open_list(open_list, close_list, (*list_iter).get_path());
+
+            sort_list(open_list);
+
+
+        }
+
+
+    }
+
+    if(open_list.size() != 0){
+        path solution_path = (*open_list.begin()).get_path();
+
+        for(int i = 0; i < solution_path.get_size(); i++) {
+            T.set_pos(solution_path[i].get_x(), solution_path[i].get_y(), 'Y');
+
+            T.set_pos(solution_path[i-1].get_x(), solution_path[i-1].get_y(), '*');
+            counter_p++;
+            system("sleep 1");
+            T.write_map_grafico();
+        }
+        system("sleep 1");
+        T.write_map_grafico();
+    }
+
+    else
+    {
+          printw("No hay solución");
+    }
+
 }
