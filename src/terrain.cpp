@@ -1,4 +1,4 @@
-#include "../include/terrain.hpp"
+#include "terrain.hpp"
 
 terrain::terrain(int m, int n, int p, bool fromfile)
 {
@@ -222,8 +222,7 @@ void terrain::write_map(void)
 void terrain::write_map_grafico(){
 
   char c;
-  initscr();
-
+  erase();
   start_color();
   init_pair(1, COLOR_WHITE, COLOR_BLUE);
   init_pair(2, COLOR_WHITE, COLOR_YELLOW);
@@ -291,4 +290,6 @@ void terrain::write_map_grafico(){
 
   addch (ACS_LRCORNER);
   attroff(COLOR_PAIR(1));
+
+
 }

@@ -3,9 +3,11 @@
 #include <cmath>
 #include <list>
 #include <curses.h>
+#include <cstdlib> 
 #include "terrain.hpp"
 #include "node.hpp"
 #include "path.hpp"
+#include "menu.hpp"
 
 class Iatester {
 

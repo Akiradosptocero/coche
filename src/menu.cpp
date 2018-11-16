@@ -1,4 +1,4 @@
-#include "../include/menu.hpp"
+#include "menu.hpp"
 
 Menu::Menu(): opciones(1,1), start(0) {
 
@@ -25,6 +25,7 @@ void Menu::generate(){
       setlocale (LC_CTYPE, "");
 
       initscr();
+      erase();
       noecho();
       keypad (stdscr, TRUE);
       meta (stdscr, TRUE);
@@ -44,7 +45,7 @@ do {
 
       start = true;
 
-  		mvprintw (5, 23, "Devolviendo las opciones seleccionadas.");
+  		mvprintw (5, 35, "Empecemos el juego.");
               	mvprintw (6, 26, "Presione cualquier tecla para seguir.");
               	getch();
 
@@ -69,7 +70,7 @@ do {
           erase();
       }
       while (menu_ret != 3 && menu_ret != 1);
-
+      erase();
       endwin();
 
 

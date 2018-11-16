@@ -1,4 +1,4 @@
-#include "../include/path.hpp"
+#include "path.hpp"
 
 path::path(){}
 

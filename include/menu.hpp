@@ -1,3 +1,4 @@
+#pragma once
 #include <curses.h>
 #include <locale.h>
 #include <string.h>

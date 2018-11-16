@@ -5,10 +5,13 @@ ODIR=../src
 IDIR=../include
 
 
-_OBJ = terrain.o main.o menu.o iatester.o path.o node.o
+_OBJ = menu.o terrain.o main.o menu.o iatester.o path.o node.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 all:main
+
+$(ODIR)/menu.o: $(ODIR)/menu.cpp
+	$(CC) -c -o $@ $< $(CXXFLAGS)
 
 $(ODIR)/terrain.o: $(ODIR)/terrain.cpp
 	$(CC) -c -o $@ $< $(CXXFLAGS)

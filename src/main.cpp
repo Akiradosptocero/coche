@@ -2,9 +2,9 @@
 #include <vector>
 #include <getopt.h>
 #include <string>
-#include "../include/iatester.hpp"
-#include "../include/menu.hpp"
-#include "../include/functions.hpp"
+#include "iatester.hpp"
+#include "menu.hpp"
+#include "functions.hpp"
 
 
 int main(int argc, char** argv){

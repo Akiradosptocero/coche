@@ -1,32 +1,67 @@
-#include "../include/iatester.hpp"
+#include "iatester.hpp"
 
 Iatester::Iatester(std::vector<int> values, bool fromfile){
 
-    system("clear");
-    counter=0;
-    counter_p=0;
-    T = terrain(values[1], values[2], values[0], fromfile);
-
-    std::pair<int,int> auxstart = T.get_car();
-    std::pair<int,int> auxend = T.get_end();
-
-    node start(auxstart.first, auxstart.second);
-    node end(auxend.first, auxend.second);
 
     if(values[3]==1){
-      noecho();
-      cbreak();
-      keypad(stdscr, TRUE);
 
-      while(getch()!=KEY_F(1)){
-        erase();
-        T.write_map_grafico();
-      }
-      astar_grafico(start, end, values[4]);
-      endwin();
+       Menu B;
+       int num = 50, num2 = 50, prob = 2;
+       fromfile = false;
+
+       do {
+
+          vector<int> v = B.get_opciones();
+          /** manual **/
+          if(v[0] == 1){
+            fromfile = true;
+          }
+
+          /** Automatico (v[0] = 2) **/
+          /*else{
+            num = 1 + rand()%100;
+            num2 = 1 + rand()%100;
+            prob = rand()%6;
+
+          }*/
+
+            T = terrain(num, num2, prob, fromfile);
+
+            std::pair<int,int> auxstart = T.get_car();
+            std::pair<int,int> auxend = T.get_end();
+
+            node start(auxstart.first, auxstart.second);
+            node end(auxend.first, auxend.second);
+
+            initscr();
+            erase();
+
+            //move(0,0);
+            //printw("%d %d %d ", num, num2, prob);
+            //getch();
+
+            T.write_map_grafico();
+
+            astar_grafico(start, end, values[4]);
+            endwin();
+
+            B.generate();
+      }while (B.get_start());
     }
-    else
+    else {
+      system("clear");
+      counter=0;
+      counter_p=0;
+      T = terrain(values[1], values[2], values[0], fromfile);
+
+      std::pair<int,int> auxstart = T.get_car();
+      std::pair<int,int> auxend = T.get_end();
+
+      node start(auxstart.first, auxstart.second);
+      node end(auxend.first, auxend.second);
+
       astar(start, end, values[4]);
+    }
 }
 
 
@@ -406,11 +441,13 @@ void Iatester::astar_grafico(node start, node goal, int opt)
 
             T.set_pos(solution_path[i-1].get_x(), solution_path[i-1].get_y(), '*');
             counter_p++;
-            system("sleep 1");
             T.write_map_grafico();
+            getch();
+            //system("sleep 0.1");
         }
-        system("sleep 1");
         T.write_map_grafico();
+        getch();
+        //system("sleep 0.1");
     }
 
     else
