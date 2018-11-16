@@ -15,8 +15,8 @@ void PrintHelp()
              "  -w : Ancho. [Default: 50]\n"
              "  -h : Alto.  [Default: 50]\n"
              "  -p : Probabilidad bloques.  [Default: 5] \n"
-             "  -f : Archivo preconfigurado\n";
-             "  -a : Funcion heuristica. [1,2,3]";
+             "  -f : Archivo preconfigurado\n"
+             "  -a : Funcion heuristica. [1,2,3]\n";
     exit(0);
 }
 

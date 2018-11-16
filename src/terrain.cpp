@@ -65,11 +65,11 @@ void terrain::random_generation(int p){
     std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
     rng.seed(ss);
 
-    std::uniform_int_distribution<int> unif3(0,m_);
+    std::uniform_int_distribution<int> unif3(0,m_-1);
     // generates number in the range 0..1
     vx = unif3(rng);
 
-    std::uniform_int_distribution<int> unif4(0,n_);
+    std::uniform_int_distribution<int> unif4(0,n_-1);
     // generates number in the range 0..1
     vy = unif4(rng);
 
@@ -90,11 +90,11 @@ void terrain::random_generation(int p){
     std::seed_seq ss{uint32_t(timeSeed & 0xffffffff), uint32_t(timeSeed>>32)};
     rng.seed(ss);
 
-    std::uniform_int_distribution<int> unif1(0,m_);
+    std::uniform_int_distribution<int> unif1(0,m_-1);
     // generates number in the range 0..1
     vx = unif1(rng);
 
-    std::uniform_int_distribution<int> unif2(0,n_);
+    std::uniform_int_distribution<int> unif2(0,n_-1);
     // generates number in the range 0..1
     vy = unif2(rng);
 
@@ -113,44 +113,39 @@ void terrain::custom_generation(void){
 
   std::fstream fs("obstacle.txt", std::ios_base::in);
 
-  int obst_n;
-  fs >> obst_n;
+  fs >> m_;
+  fs >> n_;
 
-  char aux;
-  fs >> aux;
+  std::string word;
+  M_.resize(m_);
 
-  std::vector<int> obst_i;
-  std::vector<int> obst_j;
+  for(int i=0; i<n_; i++)
+    M_[i].resize(m_);
 
-  obst_i.resize(obst_n);
-  obst_j.resize(obst_n);
+  for (int i=0; i<m_; i++){
 
-
-  int i = 0;
-
-  while((i <= obst_n) && (!fs.eof())){
-
-    fs >> obst_i[i] >> aux >> obst_j[i];
-    set_pos(obst_i[i], obst_j[i], '0');
-
-    i++;
+    for(int j=0; j<n_; j++){
+      fs >> word;
+      if (word=="0")
+        M_[i][j]=' ';
+      else if (word=="1")
+        M_[i][j] = '0';
+      else if (word=="2"){
+        M_[i][j] = 'Y';
+        car_.first=i;
+        car_.second=j;
+      }
+      else if (word=="3"){
+        M_[i][j] = 'X';
+        final_.first=i;
+        final_.second=j;
+      }
+    }
   }
 
-  fill();
+  fs.close();
 }
 
-// Para llegar con ' ' las posiciones que no tienen 'o'
-
-void terrain::fill()
-{
-    //M_.resize()
-    for(int i = 0; i < m_; i++){
-        for(int j = 0; j < n_; j++){
-            if(M_[i][j] != '0')
-                M_[i][j] = ' ';
-        }
-    }
-}
 
 int terrain::get_m(void){
   return m_;

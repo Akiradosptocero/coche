@@ -27,7 +27,6 @@ Iatester::Iatester(std::vector<int> values, bool fromfile){
     }
     else
       astar(start, end, values[4]);
-
 }
 
 
@@ -230,11 +229,11 @@ void Iatester::astar(node start, node goal, int opt)
 
             T.set_pos(solution_path[i-1].get_x(), solution_path[i-1].get_y(), '*');
             counter_p++;
-            system("sleep 1");
+            system("sleep 0.1");
             system("clear");
             T.write_map();
         }
-        system("sleep 1");
+        system("sleep 0.1");
         system("clear");
         std::cout << "\n\n";
         T.write_map();

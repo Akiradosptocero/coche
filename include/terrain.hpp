@@ -47,6 +47,4 @@ public:
     int get_m(void);
     int get_n(void);
 
-    void fill(void);
-
 };

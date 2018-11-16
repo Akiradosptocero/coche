@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <list>
+#include <curses.h>
 #include "terrain.hpp"
 #include "node.hpp"
 #include "path.hpp"
